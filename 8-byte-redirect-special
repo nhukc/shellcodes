@@ -1,0 +1,7 @@
+pop rdi
+pop rdi
+pop rdi
+add edi, 0x8
+call rdi
+
+\x5F\x5F\x5F\x83\xC7\x08\xFF\xD7
