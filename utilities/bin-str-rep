@@ -1,0 +1,25 @@
+#!/bin/bash
+#Usage
+# ./bin-str-rep file1 file2 string-to-find string-to-replace-with
+
+FILE1=$1
+FILE2=$2
+STRING1=$3
+STRING2=$4
+
+replace() {
+	x=`printf "$1" | hexdump -ve '1/1 "%.2X"'`
+	x="$x""00"
+	sizex=$((${#x}/2))
+	y=`printf "$2" | hexdump -ve '1/1 "%.2X"'`
+	sizey=$((${#y}/2))
+	sizedif=$(($sizex-$sizey))
+	a=$(printf "%${sizedif}s");
+	a=`echo ${a// /00}`
+	y="$y""$a"
+	echo "sed \"s/$x/$y/g\""
+}
+
+hexdump -ve '1/1 "%.2X"' $FILE1 \
+		| eval $(replace $STRING1 $STRING2) \
+		| xxd -r -p > $FILE2
